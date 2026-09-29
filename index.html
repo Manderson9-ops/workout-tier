@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<script>if(/iPhone|iPod|Android.+Mobile/i.test(navigator.userAgent)&&!/desktop=1/.test(location.search)){location.replace('m/'+location.hash)}</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>운동 티어 리스트 (WORK_OUT_K)</title>
+<style>
+  :root{--bg:#f4f5f8;--card:#fff;--ink:#1c2230;--sub:#5d6678;--line:#e3e6ee;
+    --S:#ff5a5f;--A:#ff9f43;--B:#f7c948;--C:#9bd35a;--D:#4fb3d9;--F:#8f9bb3;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Malgun Gothic","Apple SD Gothic Neo",system-ui,sans-serif;line-height:1.5}
+  header{background:#1c2230;color:#fff;padding:22px 20px 16px}
+  header h1{margin:0 0 4px;font-size:22px}
+  header p{margin:0;color:#b8c0d4;font-size:13px}
+  .wrap{max-width:1100px;margin:0 auto;padding:0 16px}
+  .bar{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid var(--line)}
+  .bar .wrap{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:10px 16px}
+  .tabs,.levels{display:flex;flex-wrap:wrap;gap:6px}
+  button.tab,button.lv{border:1px solid var(--line);background:#fff;padding:7px 14px;border-radius:999px;font-size:14px;cursor:pointer;color:var(--ink)}
+  button.tab.on{background:#1c2230;color:#fff;border-color:#1c2230}
+  button.lv.on{background:#3b6cff;color:#fff;border-color:#3b6cff}
+  .lvlabel{font-size:12px;color:var(--sub);margin-left:6px}
+  input.q{margin-left:auto;border:1px solid var(--line);border-radius:8px;padding:7px 10px;font-size:14px;min-width:170px}
+  .note{background:#fff8e1;border:1px solid #f1dc94;border-radius:10px;padding:10px 14px;font-size:13px;margin:16px 0}
+  .vinfo{font-size:13px;color:var(--sub);margin:14px 0 8px}
+  .vinfo a{color:#3b6cff;text-decoration:none}
+  .tier{display:flex;margin-bottom:8px;background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .tier .lab{width:64px;flex:none;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:800;color:#fff}
+  .tier .items{flex:1;display:flex;flex-wrap:wrap;gap:8px;padding:10px;min-height:56px;align-content:flex-start}
+  .tier.S .lab{background:var(--S)}.tier.A .lab{background:var(--A)}.tier.B .lab{background:var(--B);color:#5a4500}
+  .tier.C .lab{background:var(--C);color:#264400}.tier.D .lab{background:var(--D)}.tier.F .lab{background:var(--F)}
+  .tier .empty{color:#b3b9c8;font-size:13px;align-self:center;padding-left:4px}
+  .card{border:1px solid var(--line);border-left-width:5px;border-radius:9px;padding:8px 10px;background:#fafbfd;cursor:pointer;max-width:100%;flex:0 1 auto;min-width:190px}
+  .tier.S .card{border-left-color:var(--S)}.tier.A .card{border-left-color:var(--A)}.tier.B .card{border-left-color:var(--B)}
+  .tier.C .card{border-left-color:var(--C)}.tier.D .card{border-left-color:var(--D)}.tier.F .card{border-left-color:var(--F)}
+  .card:hover{background:#f0f3fa}
+  .card .n{font-weight:700;font-size:14.5px}
+  .card .g{display:inline-block;font-size:12px;font-weight:800;background:#1c2230;color:#fff;border-radius:5px;padding:0 6px;margin-right:6px}
+  .chips{margin-top:4px;display:flex;flex-wrap:wrap;gap:4px}
+  .chip{font-size:11.5px;border-radius:999px;padding:1px 8px;background:#e9edf7;color:#39415a}
+  .chip.lvc{background:#dfe8ff;color:#2748b8}
+  .chip.tg{background:#e6f6ea;color:#1f6b36}
+  .detail{display:none;margin-top:8px;padding-top:8px;border-top:1px dashed var(--line);font-size:13px;color:#2c3448}
+  .card.open{flex:1 1 100%}
+  .card.open .detail{display:block}
+  .detail a{display:inline-block;margin-top:6px;color:#3b6cff;text-decoration:none;font-weight:600}
+  .unr{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin-top:14px}
+  .unr h3{margin:0 0 6px;font-size:15px}
+  .unr li{font-size:13.5px;margin:4px 0}
+  .unr a{color:#3b6cff;text-decoration:none}
+  .ov{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;margin-top:14px}
+  .ovc{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px}
+  .ovc h3{margin:0 0 8px;font-size:16px}
+  .ovc .pick{padding:6px 0;border-top:1px solid var(--line);font-size:14px}
+  .ovc .pick small{display:block;color:var(--sub)}
+  .ovc .go{margin-top:8px;font-size:13px;color:#3b6cff;cursor:pointer}
+  footer{font-size:12px;color:var(--sub);padding:20px 16px 40px;max-width:1100px;margin:0 auto}
+  @media(max-width:600px){.tier .lab{width:44px;font-size:22px}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <h1>운동 티어 리스트</h1>
+  <p>WORK_OUT_K DB의 유튜브 영상에서 추린 티어 추천 · 카드를 누르면 이유와 영상 링크가 나옵니다 · <a href="m/" style="color:#8fb0ff">모바일 버전</a> · <a href="feed.xml" style="color:#8fb0ff">피드</a></p>
+</div></header>
+
+<div class="bar"><div class="wrap">
+  <div class="tabs" id="tabs"></div>
+  <span class="lvlabel">수준</span>
+  <div class="levels" id="levels"></div>
+  <input class="q" id="q" placeholder="운동 이름 검색">
+</div></div>
+
+<div class="wrap">
+  <div class="note">티어는 영상 진행자의 <b>이론적·주관적 판단</b>이며 검증된 합의가 아닙니다. 영상 자막의 "A0/B0"는 "A/B"로 표기했습니다. 통증·부상이 있으면 의료 전문가와 상의하세요.</div>
+  <div id="main"></div>
+</div>
+<footer>데이터 출처: db/records/*.json 과 transcripts/*.md (자동 자막 기반). 티어가 영상에서 명시되지 않은 항목은 임의로 만들지 않았습니다. <span id="gen"></span></footer>
+
+<script>
+const APP = {"version":"1c55cf23","generated_at":"2026-09-29T22:59:16+09:00","title":"운동 티어 리스트","topics":[{"key":"tri","label":"삼두","order":1,"videos":[{"id":"i40LqeORuxA","title":"최고의 삼두근 운동 VS 최악의 삼두근 운동 (티어 리스트)","channel":"급진적 과부하","date":"2026-09-28"}],"items":[{"n":"스미스머신 JM프레스","g":"S","lv":[],"tg":"내측두","w":"클로즈그립 벤치보다 팔꿈치 신전 모멘트가 훨씬 커서 내측두 자극이 최상. 처음엔 팔꿈치가 불편할 수 있으니 저중량부터 적응. 프레스라 장두 자극은 낮음.","ts":"05:22","s":322,"vid":"i40LqeORuxA"},{"n":"오버헤드 트라이셉 익스텐션 (케이블, 한쪽씩)","g":"S","lv":[],"tg":"장두","w":"팔을 머리 위로 올려 장두를 크게 늘리는 거의 최고의 장두 운동. 팔꿈치가 약간 옆으로 빠져도 됨(장두는 위팔을 내리는 기능).","ts":"11:41","s":701,"vid":"i40LqeORuxA"},{"n":"긴 로프 / 로프 2개 푸시다운","g":"A+","lv":[],"tg":"장두 수축","w":"팔이 옆·몸통 뒤로 가면서 장두가 극단적으로 수축. 오버헤드 익스텐션과 병행하면 장두 스트레치+수축을 모두 채움.","ts":"03:13","s":193,"vid":"i40LqeORuxA"},{"n":"오버헤드 익스텐션 (덤벨, 한 팔씩)","g":"A+","lv":[],"tg":"장두","w":"한 팔씩 하면 균형·중량 문제가 줄어듦.","ts":"11:35","s":695,"vid":"i40LqeORuxA"},{"n":"트라이셉 로프 푸시다운","g":"A","lv":[],"tg":"수축 · 관절 편함","w":"초반 쉽고 중간이 가장 어렵고 끝에 다시 쉬운 수축 강조형. 관절 부담이 적고 로프라 손이 자유로워 장두도 더 수축.","ts":"02:19","s":139,"vid":"i40LqeORuxA"},{"n":"삼두 푸시업 (팔꿈치 뒤로)","g":"A","lv":[],"tg":"내측두","w":"내측두엔 아주 좋지만 장두엔 별로. 기술 난이도 때문에 A. 초보는 체중, 강해지면 중량 추가.","ts":"06:59","s":419,"vid":"i40LqeORuxA"},{"n":"라잉 익스텐션 (팔꿈치를 머리 뒤로)","g":"A","lv":[],"tg":"장두","w":"팔꿈치가 머리 뒤로 갈수록 장두 개입이 커지는 스펙트럼. 목적에 맞게 선택.","ts":"09:44","s":584,"vid":"i40LqeORuxA"},{"n":"오버헤드 익스텐션 (바벨, 양팔)","g":"A-","lv":[],"tg":"장두","w":"양팔 동시라 균형 잡기 어렵고 중량이 제한되며 바벨을 머리 위로 떨어뜨릴 위험.","ts":"11:35","s":695,"vid":"i40LqeORuxA"},{"n":"푸시다운 (바 사용)","g":"B+","lv":[],"tg":"수축","w":"로프보다 손·팔 움직임이 제한되어 장두 수축이 덜함.","ts":"03:26","s":206,"vid":"i40LqeORuxA"},{"n":"딥스","g":"B","lv":[],"tg":"내측두 · 가슴","w":"상체를 세우고 팔꿈치를 접으면 삼두, 숙이면 가슴. 장두 활성은 낮음. 삼두는 다른 고립 운동을 따로 하고 딥스는 가슴용으로 권장. 초보는 딥스 머신·어시스트 딥스가 안정적.","ts":"06:07","s":367,"vid":"i40LqeORuxA"},{"n":"케이블 킥백","g":"B","lv":[],"tg":"장두 수축","w":"덤벨 킥백(D)을 케이블로 바꾸면 B까지 상승. 저항이 수평이라 후면 삼각근 부담과 과한 수축 강조가 줄어듦.","ts":"01:58","s":118,"vid":"i40LqeORuxA"},{"n":"클로즈그립 벤치프레스","g":"B-","lv":[],"tg":"내측두","w":"좋은 운동이지만 삼두보다 가슴이 먼저 한계에 도달해 삼두가 최대 효율을 못 받음. 팔꿈치를 앞으로 빼는 JM프레스로 바꾸면 개선.","ts":"04:31","s":271,"vid":"i40LqeORuxA"},{"n":"라잉 익스텐션 (바벨을 이마 쪽으로)","g":"B-","lv":[],"tg":"내측두","w":"진행자 개인 의견: 이마에 부딪혀 가동 범위가 줄어 JM프레스의 하위 호환.","ts":"09:44","s":584,"vid":"i40LqeORuxA"},{"n":"덤벨 트라이셉 킥백","g":"D","lv":[],"tg":"장두 수축","w":"수축 구간에서만 저항이 최대이고 늘어난 초반 1/3은 거의 저항이 없음. 후면 삼각근 부담이 커 불안정.","ts":"01:03","s":63,"vid":"i40LqeORuxA"}],"unrated":[{"n":"삼두 2개만 고른다면","t":"오버헤드 케이블 익스텐션(장두) + JM프레스(내측두). 3개까지 되면 긴 로프(또는 로프 2개) 푸시다운을 추가.","ts":"11:44","s":704,"vid":"i40LqeORuxA"}]},{"key":"back","label":"등","order":2,"videos":[{"id":"6jfQD3PxIOg","title":"최고의 등 운동 티어 리스트 (2026년)","channel":"급진적 과부하","date":"2026-06-30"}],"items":[{"n":"원암 랫풀다운","g":"S","lv":[],"tg":"광배","w":"견갑골을 위로 올려 늘리고(2차 신장) 몸통을 옆으로 굽혀 최대로 늘림, 당길 때 몸통도 같이 굽혀 극한 수축. 광배의 최대 길이 변화를 이끌어냄.","ts":"10:47","s":647,"vid":"6jfQD3PxIOg"},{"n":"켈소 슈러그 (체스트 서포티드 T바 머신)","g":"S","lv":[],"tg":"등 중상부 · 중부 승모근","w":"팔 개입 없이 견갑골만 모아 중부 승모근을 실패 지점까지 몰아붙임. T바는 늘어난 하단에서 부하가 가장 커 스트레치 극대화.","ts":"12:37","s":757,"vid":"6jfQD3PxIOg"},{"n":"체스트 서포티드 T바로우","g":"A+","lv":[],"tg":"등 전반","w":"처음이 가장 무겁고 당길수록 가벼워져 스트렝스 커브와 일치. 영상 표현은 \"A~A+\".","ts":"07:03","s":423,"vid":"6jfQD3PxIOg"},{"n":"랫풀다운","g":"A+","lv":["초보","중급"],"tg":"광배","w":"몸이 고정돼 안정적이고 궤적을 통제하기 쉬움.","ts":"08:49","s":529,"vid":"6jfQD3PxIOg"},{"n":"풀업","g":"A+","lv":["상급"],"tg":"광배 · 대원근","w":"체중 이상 중량(90~100kg 근처)에서는 랫풀다운이 몸이 딸려 올라가 불안정해지므로 풀업이 더 안정적.","ts":"08:49","s":529,"vid":"6jfQD3PxIOg"},{"n":"풀업","g":"A","lv":["초보","중급"],"tg":"광배 · 대원근","w":"수직 당기기로 광배·대원근에 효과적. 그립을 좁게 하면 광배, 넓게 하면 능형근·대원근 강조. 초보는 흔들림이 단점.","ts":"08:10","s":490,"vid":"6jfQD3PxIOg"},{"n":"랫풀다운","g":"A","lv":["상급"],"tg":"광배","w":"상급자에겐 풀업이 A+이고 랫풀다운은 A.","ts":"08:49","s":529,"vid":"6jfQD3PxIOg"},{"n":"캠 구조 체스트 서포티드 머신 로우","g":"A","lv":[],"tg":"등 전반","w":"동작 내내 비교적 일정한 부하. 레버 구조 머신보다 낫다.","ts":"07:03","s":423,"vid":"6jfQD3PxIOg"},{"n":"덤벨 인클라인 로우 (체스트 서포티드)","g":"A-","lv":[],"tg":"등 전반","w":"가슴 패드로 기립근 부담이 줄어 피로 비용이 적음. 다만 덤벨 세팅이 번거롭고 조금 불안정.","ts":"06:00","s":360,"vid":"6jfQD3PxIOg"},{"n":"랙풀","g":"A-","lv":[],"tg":"승모근","w":"데드리프트의 하체 구간을 건너뛰고 상단만 해서 승모근 자극이 좋음. 슈러그보다는 못함. 원판 과다·소음 등 실용성 기준으로는 B.","ts":"05:35","s":335,"vid":"6jfQD3PxIOg"},{"n":"해머 스트렝스 계열 레버 구조 로우 머신","g":"B+","lv":[],"tg":"등 전반","w":"초반이 쉽고 마지막 수축 구간이 가장 어려운 저항 프로파일이라, 등이 가장 약한 구간을 더 어렵게 만들어 비효율적.","ts":"07:03","s":423,"vid":"6jfQD3PxIOg"},{"n":"원암 케이블로우","g":"B+","lv":[],"tg":"광배","w":"원암 덤벨로우의 장점은 유지하고 흔들림을 없앰.","ts":"02:33","s":153,"vid":"6jfQD3PxIOg"},{"n":"바벨로우","g":"B-","lv":[],"tg":"등 + 기립근","w":"전신 피로가 빨리 쌓이고, 기립근이 약하면 등이 남았는데 허리가 먼저 털려 등이 실패 지점까지 못 감. 진행자는 \"대체 불가능한 장점은 없다\"고 평가.","ts":"00:38","s":38,"vid":"6jfQD3PxIOg"},{"n":"원암 덤벨로우","g":"C+","lv":[],"tg":"광배","w":"몸통을 돌려 광배를 늘리고 쥐어짤 수 있지만 덤벨이 흔들려 불안정하고 기술적으로 어려움.","ts":"02:33","s":153,"vid":"6jfQD3PxIOg"},{"n":"데드리프트 (등 운동으로 볼 때)","g":"D","lv":[],"tg":"등 운동 관점","w":"주 동작은 힙힌지이고 광배는 바벨을 잡는 안정화 역할. 실패 지점에서 허리·하체가 먼저 털려 등이 못 감. 하체·기립근 운동으로는 A.","ts":"03:39","s":219,"vid":"6jfQD3PxIOg"}],"unrated":[]},{"key":"pull","label":"풀업 종류","order":3,"videos":[{"id":"GclQVc4k4gU","title":"최고의 풀업 VS 최악의 풀업 (티어 리스트)","channel":"급진적 과부하","date":"2026-08-05"}],"items":[{"n":"뉴트럴 그립 풀업","g":"S","lv":[],"tg":"광배","w":"그립이 좁아 어깨 신전 위주로 광배 자극에 최적, 손목·팔꿈치 부담이 가장 적음. 이두 개입도 과하지 않음. 다른 등근육은 로우를 하나 추가해 채우라고 함. 완전 초보는 일반 풀업만으로도 충분.","ts":"08:01","s":481,"vid":"GclQVc4k4gU"},{"n":"어시스트 풀업 (머신)","g":"S","lv":["초보"],"tg":"입문 · 안정성","w":"무릎 지지대로 안정적이라 타겟 근육에 집중하기 쉬움. 풀업을 못 하는 초보에게 특히 유용.","ts":"06:37","s":397,"vid":"GclQVc4k4gU"},{"n":"언더그립 풀업","g":"A+","lv":["초보"],"tg":"이두 + 광배","w":"초보는 성장 역치가 낮아 이두와 광배를 함께 자극 가능.","ts":"00:21","s":21,"vid":"GclQVc4k4gU"},{"n":"오버그립 중간 너비 풀업","g":"A+","lv":["초보","중급"],"tg":"올라운더","w":"광배·대원근·능형근을 골고루 자극하는 다재다능한 기본형. 성장 역치가 낮을 때 유리.","ts":"03:44","s":224,"vid":"GclQVc4k4gU"},{"n":"와이드 그립 풀업","g":"A","lv":[],"tg":"전반적 등 성장 (대원근·능형근)","w":"광배 자극은 가장 낮지만 대원근·능형근 자극이 뛰어남. 영상 표현은 \"높은 A\". 어깨(회전근개) 부담과 부상 위험에 주의.","ts":"01:31","s":91,"vid":"GclQVc4k4gU"},{"n":"타월 풀업","g":"A","lv":[],"tg":"악력 목적","w":"악력·전완 자극이 월등(유도 선수들이 악력 훈련에 사용).","ts":"05:15","s":315,"vid":"GclQVc4k4gU"},{"n":"언더그립 풀업","g":"B+","lv":["중급","상급"],"tg":"이두 + 광배","w":"이두는 컬로 따로 할 텐데 풀업에서 미리 피로가 쌓이면 컬 퍼포먼스를 해칠 수 있음. 손목·팔꿈치 불편 가능. 진행자는 손목을 살짝 안쪽으로 돌린 그립을 선호.","ts":"00:21","s":21,"vid":"GclQVc4k4gU"},{"n":"오버그립 중간 너비 풀업","g":"B+","lv":["상급"],"tg":"올라운더","w":"상급자는 광배가 제한 요인이 되는 언더·뉴트럴 그립이 더 유리.","ts":"03:44","s":224,"vid":"GclQVc4k4gU"},{"n":"어시스트 풀업 (마지막 세트 피니셔)","g":"B+","lv":["중급","상급"],"tg":"피니셔","w":"중량·일반 풀업 뒤 마지막 세트를 어시스트로 해 등을 한계까지 털 수 있음.","ts":"06:37","s":397,"vid":"GclQVc4k4gU"},{"n":"밴드 어시스트 풀업","g":"B","lv":[],"tg":"입문 (비추천)","w":"흔들리고 밴드는 늘어날수록 저항이 커져 스트레치 구간이 쉬워지고 수축 구간이 어려워짐. 머신 어시스트가 압도적으로 좋음.","ts":"07:26","s":446,"vid":"GclQVc4k4gU"},{"n":"타월 풀업","g":"B-","lv":[],"tg":"전완 성장 목적","w":"악력·전완 자극은 좋지만 수축 상태에서 버티는 등척성 수축이라 근성장 자극은 그렇게까지 좋지 않을 수 있음. 전완은 리스트컬이 낫다고 함.","ts":"05:15","s":315,"vid":"GclQVc4k4gU"},{"n":"와이드 그립 풀업","g":"D","lv":[],"tg":"광배만 목적","w":"광배 자극이 모든 풀업 중 가장 낮음.","ts":"01:31","s":91,"vid":"GclQVc4k4gU"},{"n":"타월 풀업","g":"D","lv":[],"tg":"등 목적","w":"악력이 먼저 털려 등이 남아 있는 채로 세트가 끝날 수 있음.","ts":"05:15","s":315,"vid":"GclQVc4k4gU"},{"n":"아처 풀업","g":"D","lv":[],"tg":"재미 외 이점 없음","w":"한쪽씩 하면 매달리는 시간이 길어 그립이 먼저 털릴 수 있음. 한쪽씩 쉬는 방식이 최적이 아닐 수 있다는 \"몇 연구\"를 언급(연구 미특정).","ts":"03:00","s":180,"vid":"GclQVc4k4gU"}],"unrated":[]},{"key":"split","label":"분할 루틴","order":4,"videos":[{"id":"DtTX0QcwhRw","title":"최고의 분할 VS 최악의 분할","channel":"급진적 과부하","date":"2026-07-22"}],"items":[{"n":"몸통-말단-하체 3분할 (팔·어깨가 약한 거미형)","g":"S","lv":[],"tg":"3분할","w":"가슴+등 / 어깨+팔 / 하체. 팔·어깨가 부족한 사람에게 특히 좋다고 평가.","ts":"10:26","s":626,"vid":"DtTX0QcwhRw"},{"n":"무분할 (전신, 주 3~5회)","g":"S","lv":["초보"],"tg":"운동 빈도","w":"운동 빈도가 높아 기술을 빨리 배움. 주 2~3회로도 시간이 부족한 사람에게 좋음.","ts":"03:06","s":186,"vid":"DtTX0QcwhRw"},{"n":"몸통-말단-하체 3분할 (\"급진적 과부하 분할\")","g":"A+","lv":[],"tg":"3분할","w":"몸통=가슴+등(반대 근육이라 슈퍼세트 가능, 피로 전이 없음), 말단=어깨+팔, 하체. 진행자가 2년 전부터 주장, 온라인 PT에서 가장 많이 짠 분할.","ts":"10:26","s":626,"vid":"DtTX0QcwhRw"},{"n":"무분할 (전신)","g":"A","lv":["중급"],"tg":"운동 빈도","w":"단점: 다양한 부위를 하느라 웜업이 오래 걸림.","ts":"03:06","s":186,"vid":"DtTX0QcwhRw"},{"n":"당기기-밀기-하체 3분할","g":"A","lv":[],"tg":"3분할","w":"등이 피로한 채로 하체를 하면 데드리프트·스쿼트 안정성에 지장. 당기기 → 밀기 → 하체 → 휴식 순서를 권장.","ts":"11:32","s":692,"vid":"DtTX0QcwhRw"},{"n":"무분할 (전신)","g":"B+","lv":["상급"],"tg":"운동 빈도","w":"상급자는 운동량이 많아 웜업 시간이 길고, 이미 기술을 익혀 빈도로 연습할 필요가 적음.","ts":"03:06","s":186,"vid":"DtTX0QcwhRw"},{"n":"밀기-당기기-하체 3분할 (전형적)","g":"B+","lv":[],"tg":"3분할","w":"비슷한 근육을 묶어 가슴 후 어깨·삼두가 이미 지친 상태로 운동하게 됨.","ts":"09:47","s":587,"vid":"DtTX0QcwhRw"},{"n":"브로 스플릿 (부위별 하루 1개)","g":"D","lv":[],"tg":"주 1회 빈도","w":"대부분의 내추럴에게 비효율적이라는 주장(가슴은 수요일쯤 회복, 한 번에 11세트 초과 시 효과 감소). 약물 사용자나 초대형 근육 등 예외가 있다고 함. 회복 시점은 근거 미제시.","ts":"03:57","s":237,"vid":"DtTX0QcwhRw"}],"unrated":[{"n":"2분할 (상체-하체)","t":"티어 미평가. 주 4회(상하상하)가 현실적, 쉬는 날이 3일. 상하체가 50:50이라 하체 집중형이며, 균형을 원하면 팔 운동을 하체 날로 옮기라고 권함.","ts":"05:34","s":334,"vid":"DtTX0QcwhRw"},{"n":"상체-하체-전신 (주 3회) / 상-하-전-전 (주 4회)","t":"티어 미평가. 2분할과 무분할의 혼합형으로 빈도가 주 2회 이상 확보됨. 프로그래밍이 까다로움.","ts":"08:38","s":518,"vid":"DtTX0QcwhRw"},{"n":"좌우 분할","t":"티어 미평가. 반쯤 농담으로 소개했으나 진행자가 2개월 시도해 후기를 공유하겠다고 함. 운동 종류 제한이 큼.","ts":"12:10","s":730,"vid":"DtTX0QcwhRw"}]}],"updates":[{"date":"2026-09-29T22:55:00+09:00","type":"new_video","topic":"등","key":"back","vid":"6jfQD3PxIOg","title":"최고의 등 운동 티어 리스트 (2026년)","detail":"티어 15개 등록","dir":""},{"date":"2026-09-29T22:55:00+09:00","type":"new_video","topic":"풀업 종류","key":"pull","vid":"GclQVc4k4gU","title":"최고의 풀업 VS 최악의 풀업 (티어 리스트)","detail":"티어 14개 등록","dir":""},{"date":"2026-09-29T22:55:00+09:00","type":"new_video","topic":"분할 루틴","key":"split","vid":"DtTX0QcwhRw","title":"최고의 분할 VS 최악의 분할","detail":"티어 8개 등록","dir":""},{"date":"2026-09-29T22:40:00+09:00","type":"new_video","topic":"삼두","key":"tri","vid":"i40LqeORuxA","title":"최고의 삼두근 운동 VS 최악의 삼두근 운동 (티어 리스트)","detail":"티어 14개 등록","dir":""}]};
+const V = {}; const DATA = {};
+for (const t of APP.topics) {
+  V[t.key] = t.videos;
+  DATA[t.key] = { label: t.label, items: t.items, unr: t.unrated };
+}
+const VIDS = Object.fromEntries(APP.topics.flatMap(t => t.videos.map(v => [v.id, v])));
+const ORDER=['S','A+','A','A-','B+','B','B-','C+','C','C-','D','F'];
+const ROWS=['S','A','B','C','D','F'];
+let tab='overview', level='전체', q='';
+const $=s=>document.querySelector(s);
+function link(vid,s){return `https://www.youtube.com/watch?v=${vid}&t=${s}s`}
+function esc(t){return t.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}
+function renderNav(){
+  $('#tabs').innerHTML=[['overview','한눈에 보기'],...Object.keys(DATA).map(k=>[k,DATA[k].label]),['updates','업데이트'+(APP.updates.length?' ('+APP.updates.length+')':'')]]
+    .map(([k,l])=>`<button class="tab ${tab===k?'on':''}" data-k="${k}">${l}</button>`).join('');
+  $('#levels').innerHTML=['전체','초보','중급','상급'].map(l=>`<button class="lv ${level===l?'on':''}" data-l="${l}">${l}</button>`).join('');
+  document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{tab=b.dataset.k;render()});
+  document.querySelectorAll('.lv').forEach(b=>b.onclick=()=>{level=b.dataset.l;render()});
+}
+function pass(it){
+  if(level!=='전체' && it.lv && it.lv.length && !it.lv.includes(level)) return false;
+  if(q && !(it.n+' '+(it.tg||'')).toLowerCase().includes(q.toLowerCase())) return false;
+  return true;
+}
+function card(it,key){
+  const lv=(it.lv&&it.lv.length)?`<span class="chip lvc">${it.lv.join('·')}</span>`:'';
+  const tg=it.tg?`<span class="chip tg">${esc(it.tg)}</span>`:'';
+  return `<div class="card" onclick="this.classList.toggle('open')">
+    <div><span class="g">${it.g}</span><span class="n">${esc(it.n)}</span></div>
+    <div class="chips">${lv}${tg}</div>
+    <div class="detail">${esc(it.w)}<br><a href="${link(it.vid,it.s)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">▶ 영상 ${it.ts} 부터 보기</a></div>
+  </div>`;
+}
+function renderTopic(key){
+  const d=DATA[key], vs=V[key];
+  const items=d.items.filter(pass).sort((a,b)=>ORDER.indexOf(a.g)-ORDER.indexOf(b.g));
+  let h='<div class="vinfo">출처 영상: '+vs.map(v=>`<a href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener">${esc(v.title)}</a> · ${esc(v.channel)} · ${v.date}`).join('<br>')+'</div>';
+  for(const r of ROWS){
+    const its=items.filter(i=>i.g[0]===r);
+    if(!its.length && (r==='C'||r==='F') ) { if(!d.items.some(i=>i.g[0]===r)) continue; }
+    h+=`<div class="tier ${r}"><div class="lab">${r}</div><div class="items">${its.length?its.map(i=>card(i,key)).join(''):'<span class="empty">해당 없음</span>'}</div></div>`;
+  }
+  if(d.unr&&d.unr.length){
+    h+=`<div class="unr"><h3>티어 외 참고 항목</h3><ul>`+
+      d.unr.map(u=>`<li><b>${esc(u.n)}</b> - ${esc(u.t)} <a href="${link(u.vid,u.s)}" target="_blank" rel="noopener">▶ ${u.ts}</a></li>`).join('')+`</ul></div>`;
+  }
+  return h;
+}
+function renderOverview(){
+  let h='<div class="ov">';
+  for(const k of Object.keys(DATA)){
+    const tops=DATA[k].items.filter(pass).filter(i=>i.g==='S');
+    h+=`<div class="ovc"><h3>${DATA[k].label} · S티어</h3>`+
+      (tops.length?tops.map(i=>`<div class="pick"><b>${esc(i.n)}</b>${(i.lv&&i.lv.length)?` <span class="chip lvc">${i.lv.join('·')}</span>`:''}<small>${esc(i.tg||'')}</small></div>`).join(''):'<div class="pick"><small>선택한 수준에 해당하는 S티어 없음</small></div>')+
+      `<div class="go" data-go="${k}">전체 티어 보기 →</div></div>`;
+  }
+  h+='</div><div class="unr"><h3>이렇게 읽으세요</h3><ul><li>수준 버튼(초보/중급/상급)을 누르면 그 수준에 해당하는 평가만 보입니다. 수준 구분이 없는 항목은 항상 보입니다.</li><li>같은 운동이 수준·목적에 따라 여러 번 나올 수 있습니다(예: 언더그립 풀업은 초보 A+, 중상급 B+).</li><li>각 카드의 "▶ 영상 mm:ss" 링크는 해당 발언 지점으로 이동합니다.</li></ul></div>';
+  return h;
+}
+const TYPE={new_video:'새 영상',tier_change:'티어 변경',new_item:'항목 추가',removed_item:'항목 삭제'};
+function renderUpdates(){
+  if(!APP.updates.length) return '<div class="unr">아직 업데이트가 없습니다.</div>';
+  return '<div class="unr"><h3>최근 업데이트</h3><ul>'+APP.updates.map(e=>{
+    const arrow=e.dir==='up'?' ▲':e.dir==='down'?' ▼':'';
+    return '<li>'+e.date.slice(0,10)+' · <b>'+esc(e.topic)+'</b> · '+(TYPE[e.type]||e.type)+arrow+' - '+esc(e.detail)+' <a href="https://www.youtube.com/watch?v='+e.vid+'" target="_blank" rel="noopener">영상</a></li>';
+  }).join('')+'</ul></div>';
+}
+function render(){
+  renderNav();
+  $('#main').innerHTML = tab==='overview'?renderOverview():tab==='updates'?renderUpdates():renderTopic(tab);
+  document.querySelectorAll('[data-go]').forEach(e=>e.onclick=()=>{tab=e.dataset.go;render();window.scrollTo(0,0)});
+}
+$('#q').oninput=e=>{q=e.target.value.trim();render()};
+document.getElementById('gen').textContent='업데이트 '+APP.generated_at.slice(0,10)+' · v'+APP.version;
+render();
+</script>
+</body>
+</html>

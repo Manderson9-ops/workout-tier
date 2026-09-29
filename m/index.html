@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f4f5f8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f1420" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="티어리스트">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="format-detection" content="telephone=no">
+<link rel="apple-touch-icon" href="../icons/icon-180.png">
+<link rel="icon" type="image/png" href="../icons/icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="alternate" type="application/atom+xml" href="../feed.xml" title="업데이트 피드">
+<title>운동 티어 리스트</title>
+<style>
+:root{
+  --bg:#f2f3f7;--card:#fff;--ink:#141a28;--sub:#626b80;--line:#e2e5ee;--chip:#e8ebf3;--accent:#3b6cff;--accent-ink:#fff;
+  --S:#ff5a5f;--A:#ff9f43;--B:#f2c230;--C:#8cc84b;--D:#3fa9d4;--F:#8f9bb3;--warn:#fff6dc;--warn-line:#efd98a;
+  --hh:120px;
+}
+@media (prefers-color-scheme:dark){
+  :root{--bg:#0f1420;--card:#1a2132;--ink:#eef1f8;--sub:#9aa5bd;--line:#29324a;--chip:#252e45;--accent:#6f93ff;--accent-ink:#0b1020;--warn:#2b2614;--warn-line:#5b4e1c}
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;line-height:1.5;
+  padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right);padding-bottom:calc(64px + env(safe-area-inset-bottom));overscroll-behavior-y:none}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+a{color:var(--accent);text-decoration:none}
+header{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 92%,transparent);-webkit-backdrop-filter:saturate(180%) blur(16px);backdrop-filter:saturate(180%) blur(16px);
+  padding-top:env(safe-area-inset-top);border-bottom:1px solid var(--line)}
+.top{display:flex;align-items:center;justify-content:space-between;padding:8px 16px 4px}
+.top h1{margin:0;font-size:1.25rem;letter-spacing:-.02em}
+.top small{color:var(--sub);font-size:.75rem}
+.icb{min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;border-radius:12px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:4px 16px 8px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;min-height:36px;padding:0 14px;border-radius:999px;background:var(--chip);font-size:.9rem;white-space:nowrap}
+.chip.on{background:var(--ink);color:var(--bg);font-weight:700}
+.chips.lv .chip.on{background:var(--accent);color:var(--accent-ink)}
+.chips .lab{flex:none;align-self:center;font-size:.75rem;color:var(--sub);padding-right:2px}
+.searchrow{padding:0 16px 8px;display:none}
+.searchrow.on{display:block}
+.searchrow input{width:100%;font-size:16px;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+main{padding:10px 12px 8px;max-width:640px;margin:0 auto}
+.note{background:var(--warn);border:1px solid var(--warn-line);border-radius:12px;padding:8px 12px;font-size:.8rem;margin:0 0 10px}
+.tier{margin-bottom:14px}
+.th{position:sticky;top:var(--hh);z-index:5;display:flex;align-items:center;gap:10px;margin:0 0 6px;padding:6px 12px;border-radius:12px;color:#fff;font-size:1.5rem;font-weight:800}
+.th em{font-style:normal;font-size:.8rem;font-weight:600;opacity:.92;margin-left:auto}
+.th.S{background:var(--S)}.th.A{background:var(--A)}.th.B{background:var(--B);color:#4d3b00}.th.C{background:var(--C);color:#213b00}.th.D{background:var(--D)}.th.F{background:var(--F)}
+.it{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:6px;overflow:hidden}
+.it-h{width:100%;display:flex;align-items:center;gap:12px;padding:10px 12px;text-align:left;min-height:56px}
+.gr{flex:none;min-width:44px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.05rem;color:#fff}
+.gr.S{background:var(--S)}.gr.A{background:var(--A)}.gr.B{background:var(--B);color:#4d3b00}.gr.C{background:var(--C);color:#213b00}.gr.D{background:var(--D)}.gr.F{background:var(--F)}
+.tx{flex:1;min-width:0}
+.tx b{display:block;font-size:1rem;line-height:1.3}
+.tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:3px}
+.tg{font-size:.72rem;padding:1px 8px;border-radius:999px;background:var(--chip);color:var(--sub)}
+.tg.lv{background:color-mix(in srgb,var(--accent) 18%,transparent);color:var(--accent)}
+.chev{flex:none;color:var(--sub);transition:transform .15s}
+.it.open .chev{transform:rotate(90deg)}
+.it-b{display:none;padding:0 12px 12px 12px;border-top:1px dashed var(--line);font-size:.92rem}
+.it.open .it-b{display:block}
+.it-b p{margin:10px 0}
+.yt{display:flex;align-items:center;justify-content:center;gap:6px;min-height:44px;border-radius:12px;background:var(--accent);color:var(--accent-ink);font-weight:700}
+.empty{color:var(--sub);text-align:center;padding:36px 8px}
+.src{font-size:.78rem;color:var(--sub);margin:10px 4px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:10px}
+.card h2{margin:0 0 6px;font-size:1rem;display:flex;justify-content:space-between;align-items:center}
+.card h2 span{font-size:.8rem;color:var(--accent);font-weight:600}
+.pick{padding:8px 0;border-top:1px solid var(--line);display:flex;gap:10px;align-items:center}
+.pick:first-of-type{border-top:0}
+.pick .gr{min-width:38px;height:30px;font-size:.9rem}
+.pick small{display:block;color:var(--sub);font-size:.75rem}
+.un{padding:10px 12px;font-size:.9rem}
+.un b{display:block}
+.ev{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin-bottom:8px;display:block;color:inherit;width:100%;text-align:left}
+.ev .meta{display:flex;gap:8px;align-items:center;font-size:.75rem;color:var(--sub);margin-bottom:2px}
+.badge{font-size:.7rem;font-weight:700;padding:1px 8px;border-radius:999px;background:var(--chip)}
+.badge.new{background:var(--S);color:#fff}
+.badge.up{background:#dff5e3;color:#1c6b34}.badge.down{background:#fde3e3;color:#a12b2b}
+.dh{font-size:.8rem;color:var(--sub);margin:12px 4px 6px}
+nav{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;background:color-mix(in srgb,var(--card) 94%,transparent);-webkit-backdrop-filter:saturate(180%) blur(16px);backdrop-filter:saturate(180%) blur(16px);
+  border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+nav button{flex:1;min-height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;font-size:.72rem;color:var(--sub);position:relative}
+nav button i{font-style:normal;font-size:1.3rem;line-height:1}
+nav button.on{color:var(--accent);font-weight:700}
+nav .dot{position:absolute;top:6px;left:calc(50% + 8px);min-width:18px;height:18px;border-radius:9px;background:var(--S);color:#fff;font-size:.68rem;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 5px}
+.toast{position:fixed;left:12px;right:12px;bottom:calc(72px + env(safe-area-inset-bottom));z-index:40;background:var(--ink);color:var(--bg);border-radius:14px;padding:12px 14px;display:none;justify-content:space-between;align-items:center;gap:10px;font-size:.9rem}
+.toast.on{display:flex}
+.toast button{font-weight:800;color:var(--accent-ink);background:var(--accent);border-radius:10px;min-height:36px;padding:0 12px}
+footer{font-size:.75rem;color:var(--sub);text-align:center;padding:6px 16px 20px}
+</style>
+</head>
+<body>
+<header id="hd">
+  <div class="top"><div><h1 id="ttl">운동 티어 리스트</h1><small id="upd"></small></div>
+    <button class="icb" id="sbtn" aria-label="검색">&#128269;</button></div>
+  <div class="searchrow" id="srow"><input id="q" type="search" placeholder="운동 이름 검색" enterkeyhint="search" autocomplete="off"></div>
+  <div class="chips" id="topics"></div>
+  <div class="chips lv" id="levels"></div>
+</header>
+<main id="main"></main>
+<footer><a href="../index.html?desktop=1">PC 버전 보기</a> · <a href="../feed.xml">업데이트 피드</a></footer>
+<nav id="nav"></nav>
+<div class="toast" id="toast"><span>새 업데이트가 있어요</span><button id="reload">새로고침</button></div>
+
+<script>
+const APP = {"version":"1c55cf23","generated_at":"2026-09-29T22:59:16+09:00","title":"운동 티어 리스트","topics":[{"key":"tri","label":"삼두","order":1,"videos":[{"id":"i40LqeORuxA","title":"최고의 삼두근 운동 VS 최악의 삼두근 운동 (티어 리스트)","channel":"급진적 과부하","date":"2026-09-28"}],"items":[{"n":"스미스머신 JM프레스","g":"S","lv":[],"tg":"내측두","w":"클로즈그립 벤치보다 팔꿈치 신전 모멘트가 훨씬 커서 내측두 자극이 최상. 처음엔 팔꿈치가 불편할 수 있으니 저중량부터 적응. 프레스라 장두 자극은 낮음.","ts":"05:22","s":322,"vid":"i40LqeORuxA"},{"n":"오버헤드 트라이셉 익스텐션 (케이블, 한쪽씩)","g":"S","lv":[],"tg":"장두","w":"팔을 머리 위로 올려 장두를 크게 늘리는 거의 최고의 장두 운동. 팔꿈치가 약간 옆으로 빠져도 됨(장두는 위팔을 내리는 기능).","ts":"11:41","s":701,"vid":"i40LqeORuxA"},{"n":"긴 로프 / 로프 2개 푸시다운","g":"A+","lv":[],"tg":"장두 수축","w":"팔이 옆·몸통 뒤로 가면서 장두가 극단적으로 수축. 오버헤드 익스텐션과 병행하면 장두 스트레치+수축을 모두 채움.","ts":"03:13","s":193,"vid":"i40LqeORuxA"},{"n":"오버헤드 익스텐션 (덤벨, 한 팔씩)","g":"A+","lv":[],"tg":"장두","w":"한 팔씩 하면 균형·중량 문제가 줄어듦.","ts":"11:35","s":695,"vid":"i40LqeORuxA"},{"n":"트라이셉 로프 푸시다운","g":"A","lv":[],"tg":"수축 · 관절 편함","w":"초반 쉽고 중간이 가장 어렵고 끝에 다시 쉬운 수축 강조형. 관절 부담이 적고 로프라 손이 자유로워 장두도 더 수축.","ts":"02:19","s":139,"vid":"i40LqeORuxA"},{"n":"삼두 푸시업 (팔꿈치 뒤로)","g":"A","lv":[],"tg":"내측두","w":"내측두엔 아주 좋지만 장두엔 별로. 기술 난이도 때문에 A. 초보는 체중, 강해지면 중량 추가.","ts":"06:59","s":419,"vid":"i40LqeORuxA"},{"n":"라잉 익스텐션 (팔꿈치를 머리 뒤로)","g":"A","lv":[],"tg":"장두","w":"팔꿈치가 머리 뒤로 갈수록 장두 개입이 커지는 스펙트럼. 목적에 맞게 선택.","ts":"09:44","s":584,"vid":"i40LqeORuxA"},{"n":"오버헤드 익스텐션 (바벨, 양팔)","g":"A-","lv":[],"tg":"장두","w":"양팔 동시라 균형 잡기 어렵고 중량이 제한되며 바벨을 머리 위로 떨어뜨릴 위험.","ts":"11:35","s":695,"vid":"i40LqeORuxA"},{"n":"푸시다운 (바 사용)","g":"B+","lv":[],"tg":"수축","w":"로프보다 손·팔 움직임이 제한되어 장두 수축이 덜함.","ts":"03:26","s":206,"vid":"i40LqeORuxA"},{"n":"딥스","g":"B","lv":[],"tg":"내측두 · 가슴","w":"상체를 세우고 팔꿈치를 접으면 삼두, 숙이면 가슴. 장두 활성은 낮음. 삼두는 다른 고립 운동을 따로 하고 딥스는 가슴용으로 권장. 초보는 딥스 머신·어시스트 딥스가 안정적.","ts":"06:07","s":367,"vid":"i40LqeORuxA"},{"n":"케이블 킥백","g":"B","lv":[],"tg":"장두 수축","w":"덤벨 킥백(D)을 케이블로 바꾸면 B까지 상승. 저항이 수평이라 후면 삼각근 부담과 과한 수축 강조가 줄어듦.","ts":"01:58","s":118,"vid":"i40LqeORuxA"},{"n":"클로즈그립 벤치프레스","g":"B-","lv":[],"tg":"내측두","w":"좋은 운동이지만 삼두보다 가슴이 먼저 한계에 도달해 삼두가 최대 효율을 못 받음. 팔꿈치를 앞으로 빼는 JM프레스로 바꾸면 개선.","ts":"04:31","s":271,"vid":"i40LqeORuxA"},{"n":"라잉 익스텐션 (바벨을 이마 쪽으로)","g":"B-","lv":[],"tg":"내측두","w":"진행자 개인 의견: 이마에 부딪혀 가동 범위가 줄어 JM프레스의 하위 호환.","ts":"09:44","s":584,"vid":"i40LqeORuxA"},{"n":"덤벨 트라이셉 킥백","g":"D","lv":[],"tg":"장두 수축","w":"수축 구간에서만 저항이 최대이고 늘어난 초반 1/3은 거의 저항이 없음. 후면 삼각근 부담이 커 불안정.","ts":"01:03","s":63,"vid":"i40LqeORuxA"}],"unrated":[{"n":"삼두 2개만 고른다면","t":"오버헤드 케이블 익스텐션(장두) + JM프레스(내측두). 3개까지 되면 긴 로프(또는 로프 2개) 푸시다운을 추가.","ts":"11:44","s":704,"vid":"i40LqeORuxA"}]},{"key":"back","label":"등","order":2,"videos":[{"id":"6jfQD3PxIOg","title":"최고의 등 운동 티어 리스트 (2026년)","channel":"급진적 과부하","date":"2026-06-30"}],"items":[{"n":"원암 랫풀다운","g":"S","lv":[],"tg":"광배","w":"견갑골을 위로 올려 늘리고(2차 신장) 몸통을 옆으로 굽혀 최대로 늘림, 당길 때 몸통도 같이 굽혀 극한 수축. 광배의 최대 길이 변화를 이끌어냄.","ts":"10:47","s":647,"vid":"6jfQD3PxIOg"},{"n":"켈소 슈러그 (체스트 서포티드 T바 머신)","g":"S","lv":[],"tg":"등 중상부 · 중부 승모근","w":"팔 개입 없이 견갑골만 모아 중부 승모근을 실패 지점까지 몰아붙임. T바는 늘어난 하단에서 부하가 가장 커 스트레치 극대화.","ts":"12:37","s":757,"vid":"6jfQD3PxIOg"},{"n":"체스트 서포티드 T바로우","g":"A+","lv":[],"tg":"등 전반","w":"처음이 가장 무겁고 당길수록 가벼워져 스트렝스 커브와 일치. 영상 표현은 \"A~A+\".","ts":"07:03","s":423,"vid":"6jfQD3PxIOg"},{"n":"랫풀다운","g":"A+","lv":["초보","중급"],"tg":"광배","w":"몸이 고정돼 안정적이고 궤적을 통제하기 쉬움.","ts":"08:49","s":529,"vid":"6jfQD3PxIOg"},{"n":"풀업","g":"A+","lv":["상급"],"tg":"광배 · 대원근","w":"체중 이상 중량(90~100kg 근처)에서는 랫풀다운이 몸이 딸려 올라가 불안정해지므로 풀업이 더 안정적.","ts":"08:49","s":529,"vid":"6jfQD3PxIOg"},{"n":"풀업","g":"A","lv":["초보","중급"],"tg":"광배 · 대원근","w":"수직 당기기로 광배·대원근에 효과적. 그립을 좁게 하면 광배, 넓게 하면 능형근·대원근 강조. 초보는 흔들림이 단점.","ts":"08:10","s":490,"vid":"6jfQD3PxIOg"},{"n":"랫풀다운","g":"A","lv":["상급"],"tg":"광배","w":"상급자에겐 풀업이 A+이고 랫풀다운은 A.","ts":"08:49","s":529,"vid":"6jfQD3PxIOg"},{"n":"캠 구조 체스트 서포티드 머신 로우","g":"A","lv":[],"tg":"등 전반","w":"동작 내내 비교적 일정한 부하. 레버 구조 머신보다 낫다.","ts":"07:03","s":423,"vid":"6jfQD3PxIOg"},{"n":"덤벨 인클라인 로우 (체스트 서포티드)","g":"A-","lv":[],"tg":"등 전반","w":"가슴 패드로 기립근 부담이 줄어 피로 비용이 적음. 다만 덤벨 세팅이 번거롭고 조금 불안정.","ts":"06:00","s":360,"vid":"6jfQD3PxIOg"},{"n":"랙풀","g":"A-","lv":[],"tg":"승모근","w":"데드리프트의 하체 구간을 건너뛰고 상단만 해서 승모근 자극이 좋음. 슈러그보다는 못함. 원판 과다·소음 등 실용성 기준으로는 B.","ts":"05:35","s":335,"vid":"6jfQD3PxIOg"},{"n":"해머 스트렝스 계열 레버 구조 로우 머신","g":"B+","lv":[],"tg":"등 전반","w":"초반이 쉽고 마지막 수축 구간이 가장 어려운 저항 프로파일이라, 등이 가장 약한 구간을 더 어렵게 만들어 비효율적.","ts":"07:03","s":423,"vid":"6jfQD3PxIOg"},{"n":"원암 케이블로우","g":"B+","lv":[],"tg":"광배","w":"원암 덤벨로우의 장점은 유지하고 흔들림을 없앰.","ts":"02:33","s":153,"vid":"6jfQD3PxIOg"},{"n":"바벨로우","g":"B-","lv":[],"tg":"등 + 기립근","w":"전신 피로가 빨리 쌓이고, 기립근이 약하면 등이 남았는데 허리가 먼저 털려 등이 실패 지점까지 못 감. 진행자는 \"대체 불가능한 장점은 없다\"고 평가.","ts":"00:38","s":38,"vid":"6jfQD3PxIOg"},{"n":"원암 덤벨로우","g":"C+","lv":[],"tg":"광배","w":"몸통을 돌려 광배를 늘리고 쥐어짤 수 있지만 덤벨이 흔들려 불안정하고 기술적으로 어려움.","ts":"02:33","s":153,"vid":"6jfQD3PxIOg"},{"n":"데드리프트 (등 운동으로 볼 때)","g":"D","lv":[],"tg":"등 운동 관점","w":"주 동작은 힙힌지이고 광배는 바벨을 잡는 안정화 역할. 실패 지점에서 허리·하체가 먼저 털려 등이 못 감. 하체·기립근 운동으로는 A.","ts":"03:39","s":219,"vid":"6jfQD3PxIOg"}],"unrated":[]},{"key":"pull","label":"풀업 종류","order":3,"videos":[{"id":"GclQVc4k4gU","title":"최고의 풀업 VS 최악의 풀업 (티어 리스트)","channel":"급진적 과부하","date":"2026-08-05"}],"items":[{"n":"뉴트럴 그립 풀업","g":"S","lv":[],"tg":"광배","w":"그립이 좁아 어깨 신전 위주로 광배 자극에 최적, 손목·팔꿈치 부담이 가장 적음. 이두 개입도 과하지 않음. 다른 등근육은 로우를 하나 추가해 채우라고 함. 완전 초보는 일반 풀업만으로도 충분.","ts":"08:01","s":481,"vid":"GclQVc4k4gU"},{"n":"어시스트 풀업 (머신)","g":"S","lv":["초보"],"tg":"입문 · 안정성","w":"무릎 지지대로 안정적이라 타겟 근육에 집중하기 쉬움. 풀업을 못 하는 초보에게 특히 유용.","ts":"06:37","s":397,"vid":"GclQVc4k4gU"},{"n":"언더그립 풀업","g":"A+","lv":["초보"],"tg":"이두 + 광배","w":"초보는 성장 역치가 낮아 이두와 광배를 함께 자극 가능.","ts":"00:21","s":21,"vid":"GclQVc4k4gU"},{"n":"오버그립 중간 너비 풀업","g":"A+","lv":["초보","중급"],"tg":"올라운더","w":"광배·대원근·능형근을 골고루 자극하는 다재다능한 기본형. 성장 역치가 낮을 때 유리.","ts":"03:44","s":224,"vid":"GclQVc4k4gU"},{"n":"와이드 그립 풀업","g":"A","lv":[],"tg":"전반적 등 성장 (대원근·능형근)","w":"광배 자극은 가장 낮지만 대원근·능형근 자극이 뛰어남. 영상 표현은 \"높은 A\". 어깨(회전근개) 부담과 부상 위험에 주의.","ts":"01:31","s":91,"vid":"GclQVc4k4gU"},{"n":"타월 풀업","g":"A","lv":[],"tg":"악력 목적","w":"악력·전완 자극이 월등(유도 선수들이 악력 훈련에 사용).","ts":"05:15","s":315,"vid":"GclQVc4k4gU"},{"n":"언더그립 풀업","g":"B+","lv":["중급","상급"],"tg":"이두 + 광배","w":"이두는 컬로 따로 할 텐데 풀업에서 미리 피로가 쌓이면 컬 퍼포먼스를 해칠 수 있음. 손목·팔꿈치 불편 가능. 진행자는 손목을 살짝 안쪽으로 돌린 그립을 선호.","ts":"00:21","s":21,"vid":"GclQVc4k4gU"},{"n":"오버그립 중간 너비 풀업","g":"B+","lv":["상급"],"tg":"올라운더","w":"상급자는 광배가 제한 요인이 되는 언더·뉴트럴 그립이 더 유리.","ts":"03:44","s":224,"vid":"GclQVc4k4gU"},{"n":"어시스트 풀업 (마지막 세트 피니셔)","g":"B+","lv":["중급","상급"],"tg":"피니셔","w":"중량·일반 풀업 뒤 마지막 세트를 어시스트로 해 등을 한계까지 털 수 있음.","ts":"06:37","s":397,"vid":"GclQVc4k4gU"},{"n":"밴드 어시스트 풀업","g":"B","lv":[],"tg":"입문 (비추천)","w":"흔들리고 밴드는 늘어날수록 저항이 커져 스트레치 구간이 쉬워지고 수축 구간이 어려워짐. 머신 어시스트가 압도적으로 좋음.","ts":"07:26","s":446,"vid":"GclQVc4k4gU"},{"n":"타월 풀업","g":"B-","lv":[],"tg":"전완 성장 목적","w":"악력·전완 자극은 좋지만 수축 상태에서 버티는 등척성 수축이라 근성장 자극은 그렇게까지 좋지 않을 수 있음. 전완은 리스트컬이 낫다고 함.","ts":"05:15","s":315,"vid":"GclQVc4k4gU"},{"n":"와이드 그립 풀업","g":"D","lv":[],"tg":"광배만 목적","w":"광배 자극이 모든 풀업 중 가장 낮음.","ts":"01:31","s":91,"vid":"GclQVc4k4gU"},{"n":"타월 풀업","g":"D","lv":[],"tg":"등 목적","w":"악력이 먼저 털려 등이 남아 있는 채로 세트가 끝날 수 있음.","ts":"05:15","s":315,"vid":"GclQVc4k4gU"},{"n":"아처 풀업","g":"D","lv":[],"tg":"재미 외 이점 없음","w":"한쪽씩 하면 매달리는 시간이 길어 그립이 먼저 털릴 수 있음. 한쪽씩 쉬는 방식이 최적이 아닐 수 있다는 \"몇 연구\"를 언급(연구 미특정).","ts":"03:00","s":180,"vid":"GclQVc4k4gU"}],"unrated":[]},{"key":"split","label":"분할 루틴","order":4,"videos":[{"id":"DtTX0QcwhRw","title":"최고의 분할 VS 최악의 분할","channel":"급진적 과부하","date":"2026-07-22"}],"items":[{"n":"몸통-말단-하체 3분할 (팔·어깨가 약한 거미형)","g":"S","lv":[],"tg":"3분할","w":"가슴+등 / 어깨+팔 / 하체. 팔·어깨가 부족한 사람에게 특히 좋다고 평가.","ts":"10:26","s":626,"vid":"DtTX0QcwhRw"},{"n":"무분할 (전신, 주 3~5회)","g":"S","lv":["초보"],"tg":"운동 빈도","w":"운동 빈도가 높아 기술을 빨리 배움. 주 2~3회로도 시간이 부족한 사람에게 좋음.","ts":"03:06","s":186,"vid":"DtTX0QcwhRw"},{"n":"몸통-말단-하체 3분할 (\"급진적 과부하 분할\")","g":"A+","lv":[],"tg":"3분할","w":"몸통=가슴+등(반대 근육이라 슈퍼세트 가능, 피로 전이 없음), 말단=어깨+팔, 하체. 진행자가 2년 전부터 주장, 온라인 PT에서 가장 많이 짠 분할.","ts":"10:26","s":626,"vid":"DtTX0QcwhRw"},{"n":"무분할 (전신)","g":"A","lv":["중급"],"tg":"운동 빈도","w":"단점: 다양한 부위를 하느라 웜업이 오래 걸림.","ts":"03:06","s":186,"vid":"DtTX0QcwhRw"},{"n":"당기기-밀기-하체 3분할","g":"A","lv":[],"tg":"3분할","w":"등이 피로한 채로 하체를 하면 데드리프트·스쿼트 안정성에 지장. 당기기 → 밀기 → 하체 → 휴식 순서를 권장.","ts":"11:32","s":692,"vid":"DtTX0QcwhRw"},{"n":"무분할 (전신)","g":"B+","lv":["상급"],"tg":"운동 빈도","w":"상급자는 운동량이 많아 웜업 시간이 길고, 이미 기술을 익혀 빈도로 연습할 필요가 적음.","ts":"03:06","s":186,"vid":"DtTX0QcwhRw"},{"n":"밀기-당기기-하체 3분할 (전형적)","g":"B+","lv":[],"tg":"3분할","w":"비슷한 근육을 묶어 가슴 후 어깨·삼두가 이미 지친 상태로 운동하게 됨.","ts":"09:47","s":587,"vid":"DtTX0QcwhRw"},{"n":"브로 스플릿 (부위별 하루 1개)","g":"D","lv":[],"tg":"주 1회 빈도","w":"대부분의 내추럴에게 비효율적이라는 주장(가슴은 수요일쯤 회복, 한 번에 11세트 초과 시 효과 감소). 약물 사용자나 초대형 근육 등 예외가 있다고 함. 회복 시점은 근거 미제시.","ts":"03:57","s":237,"vid":"DtTX0QcwhRw"}],"unrated":[{"n":"2분할 (상체-하체)","t":"티어 미평가. 주 4회(상하상하)가 현실적, 쉬는 날이 3일. 상하체가 50:50이라 하체 집중형이며, 균형을 원하면 팔 운동을 하체 날로 옮기라고 권함.","ts":"05:34","s":334,"vid":"DtTX0QcwhRw"},{"n":"상체-하체-전신 (주 3회) / 상-하-전-전 (주 4회)","t":"티어 미평가. 2분할과 무분할의 혼합형으로 빈도가 주 2회 이상 확보됨. 프로그래밍이 까다로움.","ts":"08:38","s":518,"vid":"DtTX0QcwhRw"},{"n":"좌우 분할","t":"티어 미평가. 반쯤 농담으로 소개했으나 진행자가 2개월 시도해 후기를 공유하겠다고 함. 운동 종류 제한이 큼.","ts":"12:10","s":730,"vid":"DtTX0QcwhRw"}]}],"updates":[{"date":"2026-09-29T22:55:00+09:00","type":"new_video","topic":"등","key":"back","vid":"6jfQD3PxIOg","title":"최고의 등 운동 티어 리스트 (2026년)","detail":"티어 15개 등록","dir":""},{"date":"2026-09-29T22:55:00+09:00","type":"new_video","topic":"풀업 종류","key":"pull","vid":"GclQVc4k4gU","title":"최고의 풀업 VS 최악의 풀업 (티어 리스트)","detail":"티어 14개 등록","dir":""},{"date":"2026-09-29T22:55:00+09:00","type":"new_video","topic":"분할 루틴","key":"split","vid":"DtTX0QcwhRw","title":"최고의 분할 VS 최악의 분할","detail":"티어 8개 등록","dir":""},{"date":"2026-09-29T22:40:00+09:00","type":"new_video","topic":"삼두","key":"tri","vid":"i40LqeORuxA","title":"최고의 삼두근 운동 VS 최악의 삼두근 운동 (티어 리스트)","detail":"티어 14개 등록","dir":""}]};
+const LS = {get:(k,d)=>{try{const v=localStorage.getItem('tier.'+k);return v===null?d:JSON.parse(v)}catch(e){return d}},set:(k,v)=>{try{localStorage.setItem('tier.'+k,JSON.stringify(v))}catch(e){}}};
+const $=s=>document.querySelector(s);
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const ORDER=['S+','S','S-','A+','A','A-','B+','B','B-','C+','C','C-','D+','D','D-','F'];
+const ROWS=['S','A','B','C','D','F'];
+const TYPE={new_video:'새 영상',tier_change:'티어 변경',new_item:'항목 추가',removed_item:'항목 삭제'};
+const topics=APP.topics, byKey=Object.fromEntries(topics.map(t=>[t.key,t]));
+const state={view:'home',topic:LS.get('topic',topics[0].key),level:LS.get('level','전체'),q:'',open:new Set()};
+let seenPrev=LS.get('seenAt',null);
+if(!byKey[state.topic]) state.topic=topics[0].key;
+
+function parseHash(){
+  const p=location.hash.replace(/^#\/?/,'').split('/');
+  if(p[0]==='tier'){state.view='tier'; if(byKey[p[1]]) state.topic=p[1];}
+  else if(p[0]==='updates') state.view='updates';
+  else state.view='home';
+}
+function go(view,topic){location.hash='#/'+view+(topic?'/'+topic:'')}
+function ytLink(vid,s){return 'https://www.youtube.com/watch?v='+vid+'&t='+s+'s'}
+function pass(it){
+  if(state.level!=='전체'&&it.lv.length&&!it.lv.includes(state.level))return false;
+  if(state.q&&!(it.n+' '+it.tg).toLowerCase().includes(state.q.toLowerCase()))return false;
+  return true;
+}
+function unseenCount(){ const s=LS.get('seenAt',null); if(!s) return 0; return APP.updates.filter(e=>e.date>s).length }
+
+function renderChrome(){
+  $('#upd').textContent='업데이트 '+APP.generated_at.slice(0,10)+' · v'+APP.version;
+  const showF=state.view==='tier'||state.view==='home';
+  $('#topics').style.display=state.view==='tier'?'flex':'none';
+  $('#levels').style.display=showF?'flex':'none';
+  $('#sbtn').style.visibility=state.view==='tier'?'visible':'hidden';
+  $('#topics').innerHTML=topics.map(t=>`<button class="chip ${state.topic===t.key?'on':''}" data-topic="${t.key}">${esc(t.label)}</button>`).join('');
+  $('#levels').innerHTML='<span class="lab">내 수준</span>'+['전체','초보','중급','상급'].map(l=>`<button class="chip ${state.level===l?'on':''}" data-level="${l}">${l}</button>`).join('');
+  const n=unseenCount();
+  $('#nav').innerHTML=[['home','&#127968;','홈'],['tier','&#127942;','티어'],['updates','&#128276;','업데이트']].map(([k,i,l])=>
+    `<button class="${state.view===k?'on':''}" data-view="${k}"><i>${i}</i>${l}${k==='updates'&&n?`<span class="dot">${n}</span>`:''}</button>`).join('');
+  requestAnimationFrame(()=>document.documentElement.style.setProperty('--hh',$('#hd').offsetHeight+'px'));
+}
+function itemCard(it,i){
+  const id=it.vid+'|'+it.n+'|'+it.tg+'|'+it.lv.join(',')+'|'+it.g;
+  const lv=it.lv.length?`<span class="tg lv">${it.lv.join('·')}</span>`:'';
+  const tg=it.tg?`<span class="tg">${esc(it.tg)}</span>`:'';
+  return `<article class="it ${state.open.has(id)?'open':''}" data-id="${esc(id)}">
+    <button class="it-h" data-toggle aria-expanded="${state.open.has(id)}">
+      <span class="gr ${it.g[0]}">${it.g}</span>
+      <span class="tx"><b>${esc(it.n)}</b><span class="tags">${lv}${tg}</span></span><span class="chev">&#9656;</span></button>
+    <div class="it-b"><p>${esc(it.w)}</p><a class="yt" href="${ytLink(it.vid,it.s)}">&#9654; 영상 ${it.ts} 부터 보기</a></div></article>`;
+}
+function renderTier(){
+  const t=byKey[state.topic];
+  const items=t.items.filter(pass).sort((a,b)=>ORDER.indexOf(a.g)-ORDER.indexOf(b.g));
+  let h='<div class="note">티어는 영상 진행자의 주관적 판단이며 검증된 합의가 아닙니다. 통증·부상이 있으면 전문가와 상의하세요.</div>';
+  if(!items.length) h+='<div class="empty">조건에 맞는 항목이 없어요</div>';
+  for(const r of ROWS){
+    const its=items.filter(i=>i.g[0]===r);
+    if(!its.length)continue;
+    h+=`<section class="tier"><h3 class="th ${r}">${r}<em>${its.length}개</em></h3>${its.map(itemCard).join('')}</section>`;
+  }
+  if(t.unrated.length&&!state.q){
+    h+='<section class="tier"><h3 class="th F" style="background:var(--sub)">참고<em>티어 미평가</em></h3>'+
+      t.unrated.map(u=>`<div class="it un"><b>${esc(u.n)}</b>${esc(u.t)} <a href="${ytLink(u.vid,u.s)}">&#9654; ${u.ts}</a></div>`).join('')+'</section>';
+  }
+  h+='<div class="src">출처: '+t.videos.map(v=>`<a href="https://www.youtube.com/watch?v=${v.id}">${esc(v.title)}</a> (${esc(v.channel)}, ${v.date})`).join('<br>')+'</div>';
+  return h;
+}
+function renderHome(){
+  let h='<div class="note">S티어 요약입니다. 카드를 누르면 전체 티어로 이동해요.</div>';
+  for(const t of topics){
+    const tops=t.items.filter(i=>i.g==='S'&&(state.level==='전체'||!i.lv.length||i.lv.includes(state.level)));
+    h+=`<div class="card" data-goto="${t.key}"><h2>${esc(t.label)} · S티어<span>전체 보기 &#8250;</span></h2>`+
+      (tops.length?tops.map(i=>`<div class="pick"><span class="gr S">S</span><div><b>${esc(i.n)}</b><small>${esc(i.tg)}${i.lv.length?' · '+i.lv.join('·'):''}</small></div></div>`).join(''):'<div class="pick"><small>선택한 수준의 S티어가 없어요</small></div>')+'</div>';
+  }
+  const ups=APP.updates.slice(0,3);
+  if(ups.length){h+='<div class="card" data-view="updates"><h2>최근 업데이트<span>더 보기 &#8250;</span></h2>'+ups.map(e=>`<div class="pick"><div><b>[${esc(e.topic)}] ${esc(e.detail)}</b><small>${e.date.slice(0,10)} · ${TYPE[e.type]||e.type}</small></div></div>`).join('')+'</div>';}
+  return h;
+}
+function renderUpdates(){
+  if(!APP.updates.length) return '<div class="empty">아직 업데이트가 없어요</div>';
+  let h='',last='';
+  for(const e of APP.updates){
+    const d=e.date.slice(0,10);
+    if(d!==last){h+=`<div class="dh">${d}</div>`;last=d}
+    const isNew=seenPrev&&e.date>seenPrev;
+    const dir=e.dir==='up'?'<span class="badge up">&#9650; 상승</span>':e.dir==='down'?'<span class="badge down">&#9660; 하락</span>':'';
+    h+=`<button class="ev" data-goto="${e.key}"><div class="meta">${isNew?'<span class="badge new">NEW</span>':''}<span class="badge">${TYPE[e.type]||e.type}</span>${dir}<span>${esc(e.topic)}</span></div><b>${esc(e.detail)}</b><div class="meta">${esc(e.title)}</div></button>`;
+  }
+  return h;
+}
+function render(){
+  if(state.view==='updates'&&APP.updates.length){LS.set('seenAt',APP.updates[0].date)}
+  renderChrome();
+  $('#main').innerHTML=state.view==='tier'?renderTier():state.view==='updates'?renderUpdates():renderHome();
+}
+document.addEventListener('click',e=>{
+  const t=e.target.closest('[data-toggle],[data-topic],[data-level],[data-view],[data-goto],#sbtn,#reload');
+  if(!t)return;
+  if(t.id==='reload'){location.reload();return}
+  if(t.id==='sbtn'){const r=$('#srow');r.classList.toggle('on');if(r.classList.contains('on'))$('#q').focus();else{state.q='';$('#q').value='';render()}return}
+  if(t.dataset.toggle!==undefined){const a=t.closest('.it');const id=a.dataset.id;if(state.open.has(id)){state.open.delete(id);a.classList.remove('open')}else{state.open.add(id);a.classList.add('open')}t.setAttribute('aria-expanded',a.classList.contains('open'));return}
+  if(t.dataset.topic){state.topic=t.dataset.topic;LS.set('topic',state.topic);go('tier',state.topic);window.scrollTo(0,0);return}
+  if(t.dataset.level){state.level=t.dataset.level;LS.set('level',state.level);render();return}
+  if(t.dataset.view){if(t.dataset.view==='tier')go('tier',state.topic);else go(t.dataset.view);window.scrollTo(0,0);return}
+  if(t.dataset.goto){state.topic=t.dataset.goto;LS.set('topic',state.topic);go('tier',state.topic);window.scrollTo(0,0)}
+});
+$('#q').addEventListener('input',e=>{state.q=e.target.value.trim();$('#main').innerHTML=renderTier()});
+window.addEventListener('hashchange',()=>{parseHash();render()});
+window.addEventListener('resize',()=>{document.documentElement.style.setProperty('--hh',$('#hd').offsetHeight+'px')});
+
+// 새 버전 감지: 앱으로 돌아올 때마다 확인
+async function checkUpdate(){
+  try{
+    const r=await fetch('../tier_data.json?_='+Date.now(),{cache:'no-store'});
+    const d=await r.json();
+    if(d.version!==APP.version)$('#toast').classList.add('on');
+  }catch(e){}
+}
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')checkUpdate()});
+if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{})}
+if(seenPrev===null){LS.set('seenAt',APP.updates.length?APP.updates[0].date:APP.generated_at);seenPrev=LS.get('seenAt',null)}
+$('#ttl').textContent=APP.title;
+parseHash();
+if(!location.hash&&LS.get('view',null)==='tier'){}
+render();
+checkUpdate();
+</script>
+</body>
+</html>
