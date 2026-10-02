@@ -1,5 +1,5 @@
 /* 자동 생성 (tools/build_site.py). 네트워크 우선, 오프라인이면 마지막 캐시 사용. */
-const V = 'tier-5e69b678';
+const V = 'tier-e509725f';
 const CORE = ['./', './index.html', './manifest.webmanifest', '../icons/icon-192.png', '../tier_data.json'];
 
 self.addEventListener('install', e => {
